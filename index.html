@@ -25,7 +25,8 @@ button{font:inherit;color:#fff;cursor:pointer}
 #room b{color:var(--acc);font-weight:600}
 #tp{position:fixed;top:calc(var(--top) + 148px);left:max(10px,env(safe-area-inset-left));width:min(270px,62vw);max-height:calc(100% - var(--top) - 170px);overflow:auto;padding:10px;z-index:11;display:grid;grid-template-columns:1fr 1fr;gap:8px;touch-action:pan-y}
 .chip{padding:10px 6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;font-size:14px;text-align:center}
-#hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);padding:8px 16px;font-size:13px;z-index:10;text-align:center;line-height:1.6;max-width:92vw;opacity:.92}
+#disc{position:fixed;bottom:3px;left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.7);z-index:9;pointer-events:none;padding:0 8px}
+#hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:8px 16px;font-size:13px;z-index:10;text-align:center;line-height:1.6;max-width:92vw;opacity:.92}
 #lookpad{position:fixed;top:0;bottom:0;right:0;width:56%;z-index:5}
 #joy{position:fixed;left:max(22px,env(safe-area-inset-left));bottom:max(26px,env(safe-area-inset-bottom));width:140px;height:140px;border-radius:50%;background:rgba(16,26,38,.38);border:2px solid rgba(255,255,255,.5);z-index:8;touch-action:none}
 #knob{position:absolute;left:50%;top:50%;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;background:rgba(255,255,255,.75);box-shadow:0 2px 8px rgba(0,0,0,.4);pointer-events:none}
@@ -67,6 +68,7 @@ a[href*="netlify.com"],a[href*="netlify.app/?"],[id*="netlify" i],[class*="netli
 <div id="hint" class="glass hidden"></div>
 <div id="lookpad" class="hidden"></div>
 <div id="joy" class="hidden"><div id="knob"></div></div>
+<div id="disc">הרהיטים וההדמיה נועדו להמחשה בלבד</div>
 <div id="flash"></div>
 
 <script type="module">
@@ -525,7 +527,7 @@ function ficus() {
     const pd = new THREE.Group(); for (const x of [-.45, .45]) { cy(pd, .003, .003, .7, mat(0x333), x, 1.9, 0, 4); cy(pd, .14, .14, .28, mat(0xf4efe4, .5, 0, { emissive: 0xffe4ad, emissiveIntensity: .45 }), x, 1.62, 0, 24); }
     pd.position.set(wx(605), 0, wz(593)); ceilG.add(pd); }
   put(wardrobe(1.5, .34), 709, 470, PI / 2, [697, 415, 721, 525]); put(wardrobe(1.5, .34), 709, 590, PI / 2, [697, 535, 721, 645]);
-  { const g = new THREE.Group(); rb(g, .8, .85, .3, .015, M.veneer, 0, 0, 0); rb(g, .5, .75, .02, .01, mat(0xbfd9ea, .04, .85), 0, 1.15, -.14); put(g, 262, 640, PI, [246, 628, 280, 652]);
+  { const g = new THREE.Group(); rb(g, .8, .85, .3, .015, M.veneer, 0, 0, 0); rb(g, .5, .75, .02, .01, mat(0xbfd9ea, .04, .85), 0, 1.15, -.14); put(g, 262, 636, PI, [246, 625, 280, 646]);
     rb(furn, .7, .02, .45, .008, mat(0x5a4a3a, 1), wx(200), .005, wz(562), 2); }
 }
 
@@ -559,7 +561,7 @@ function ficus() {
   bxPx(furn, 915, 745, 1018, 805, 0, .04, M.porc);
   bx(furn, 1.4, 2.0, .02, GLASS, wx(962), 0, wz(806)); cy(furn, .015, .015, 1.0, M.brass, wx(1005), 1.2, wz(752), 8);
   put(toilet(), 945, 936, PI, [930, 910, 962, 958]);
-  put(vanity(1.0, .5), 1000, 870, -PI / 2, [982, 835, 1020, 906]);
+  put(vanity(1.0, .5), 996, 870, -PI / 2, [978, 835, 1014, 906]);
 }
 /* ---------------------------------------------------------------- MAIN BATH + SERVICE */
 {
@@ -575,8 +577,8 @@ function ficus() {
   put(palm(2.1, 12), 372, 100, 0, [358, 86, 386, 114]); put(palm(1.4, 9, 0x3d8c43), 362, 152, 0, [352, 142, 372, 162]);
   put(bush(.6), 650, 100, 0, [636, 86, 664, 114]); put(bush(.5, 0xb64fd6), 655, 152, 0, [642, 140, 668, 164]);
   const mk = () => { const g = new THREE.Group(); rb(g, .55, .07, .55, .03, mat(0x4a4f55, .5), 0, .43, 0); rb(g, .55, .4, .08, .03, mat(0x4a4f55, .5), 0, .5, -.25).rotation.x = -.15; for (const [x, z] of [[-.22, -.22], [.22, -.22], [-.22, .22], [.22, .22]]) cy(g, .02, .015, .45, mat(0x2b2f33, .5, .6), x, 0, z, 8); return g; };
-  put(mk(), 600, 78, 0); put(mk(), 600, 134, PI); put(mk(), 568, 106, PI / 2); put(mk(), 632, 106, -PI / 2);
-  const tb = new THREE.Group(); cy(tb, .4, .4, .04, mat(0x4a4f55, .5), 0, .72, 0, 32); cy(tb, .03, .03, .72, mat(0x2b2f33, .5, .6), 0, 0, 0, 8); cy(tb, .22, .22, .03, mat(0x2b2f33, .5, .6), 0, 0, 0, 16); put(tb, 600, 106, 0, [582, 88, 618, 124]);
+  put(mk(), 545, 78, 0); put(mk(), 545, 134, PI); put(mk(), 513, 106, PI / 2); put(mk(), 577, 106, -PI / 2);
+  const tb = new THREE.Group(); cy(tb, .4, .4, .04, mat(0x4a4f55, .5), 0, .72, 0, 32); cy(tb, .03, .03, .72, mat(0x2b2f33, .5, .6), 0, 0, 0, 8); cy(tb, .22, .22, .03, mat(0x2b2f33, .5, .6), 0, 0, 0, 16); put(tb, 545, 106, 0, [527, 88, 563, 124]);
   // outdoor lounge (L-sofa + coffee table)
   rbPx(furn, 395, 58, 500, 92, .12, .3, .05, M.fab); rbPx(furn, 395, 58, 500, 68, .38, .45, .05, M.fabB); rbPx(furn, 395, 92, 435, 135, .12, .3, .05, M.fab); rbPx(furn, 395, 68, 407, 135, .38, .45, .05, M.fabB);
   rbPx(furn, 409, 69, 497, 92, .42, .14, .05, M.fab); rbPx(furn, 409, 93, 434, 132, .42, .14, .05, M.fab);
@@ -895,7 +897,7 @@ wallsG.scale.y = wallK; wardG.scale.y = .42; ceilG.visible = false; headersG.vis
 refreshQ(); resize(); $('load').remove(); $('start').classList.remove('hidden'); updateHint();
 if (qMode === 'auto') applyLevel(2);
 requestAnimationFrame(frame);
-window.tour = { teleport, setMode, player, startTour, camera, renderer };
+window.tour = { furn: mapFurn, solids, S, CX, CY, teleport, setMode, player, startTour, camera, renderer };
 </script>
 <script>
 (function(){var own=['c','load','start','room','mm','bar','tp','hint','lookpad','joy','flash'];
@@ -907,6 +909,8 @@ new MutationObserver(sweep).observe(document.documentElement,{childList:true,sub
 </script>
 </body>
 </html>
+
+
 
 
 
