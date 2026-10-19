@@ -120,11 +120,17 @@ function ctex(w, h, draw, rx = 1, ry = rx) {
 }
 const speckle = (g, w, h, n, cols, size = 2) => { for (let i = 0; i < n; i++) { g.fillStyle = cols[(rand() * cols.length) | 0]; g.fillRect(rand() * w, rand() * h, size * (.5 + rand()), size * (.5 + rand())); } };
 const T = {};
-T.tile = ctex(256, 256, (g, w, h) => {
-  g.fillStyle = '#ece1ca'; g.fillRect(0, 0, w, h);
-  for (let i = 0; i < 1500; i++) { g.fillStyle = rand() < .5 ? `rgba(255,255,255,${rand() * .09})` : `rgba(150,128,96,${rand() * .07})`; g.beginPath(); g.arc(rand() * w, rand() * h, rand() * 5 + 1, 0, 7); g.fill(); }
-  g.strokeStyle = '#c4b698'; g.lineWidth = 4; g.strokeRect(0, 0, w, h);
-}, 1 / .6);
+T.tile = ctex(1024, 1024, (g, w, h) => {      // 4x4 porcelain tiles, each slightly different, with veining
+  const n = 4, s = w / n;
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+    const x = i * s, y = j * s, l = 86 + rand() * 6;
+    g.fillStyle = `hsl(${38 + rand() * 6},${28 + rand() * 10}%,${l}%)`; g.fillRect(x, y, s, s);
+    for (let k = 0; k < 90; k++) { g.fillStyle = rand() < .5 ? `rgba(255,255,255,${rand() * .10})` : `rgba(150,128,96,${rand() * .07})`; g.beginPath(); g.arc(x + rand() * s, y + rand() * s, rand() * 14 + 2, 0, 7); g.fill(); }
+    for (let k = 0; k < 5; k++) { g.strokeStyle = `rgba(170,148,110,${.05 + rand() * .08})`; g.lineWidth = 1 + rand() * 2; g.beginPath(); let px = x + rand() * s, py = y + rand() * s; g.moveTo(px, py); for (let m = 0; m < 4; m++) { px += (rand() - .5) * s * .5; py += (rand() - .3) * s * .4; g.lineTo(px, py); } g.stroke(); }
+    const gr = g.createLinearGradient(x, y, x + s, y + s); gr.addColorStop(0, 'rgba(255,255,255,.10)'); gr.addColorStop(1, 'rgba(120,100,70,.08)'); g.fillStyle = gr; g.fillRect(x, y, s, s);
+  }
+  g.strokeStyle = '#bfb094'; g.lineWidth = 5; for (let i = 0; i <= n; i++) { g.beginPath(); g.moveTo(i * s, 0); g.lineTo(i * s, h); g.stroke(); g.beginPath(); g.moveTo(0, i * s); g.lineTo(w, i * s); g.stroke(); }
+}, 1 / 2.4);
 T.wood = ctex(512, 512, (g, w, h) => {
   const rows = 6, rh = h / rows;
   for (let r = 0; r < rows; r++) {
@@ -325,7 +331,7 @@ addWall(381, 246, 691, 246, [[412, 530, 'glass'], [530, 652, 'door']]);
 addWall(381, 201, 381, 246);
 addWall(691, 201, 691, 654);
 addWall(691, 404, 801, 404);
-addWall(801, 207, 801, 404, [[262, 335, 'door', dl('a', 1, DOORW, 125)]]);
+addWall(801, 207, 801, 404, [[262, 335, 'door', dl('b', 1, DOORW, 165)]]);
 addWall(548, 654, 691, 654);
 addWall(801, 490, 1022, 490);
 addWall(803, 490, 803, 733, [[540, 630, 'door', dl('b', -1, 0x8c949b, 165)]]);
@@ -421,7 +427,7 @@ function palm(h = 1.5, leaves = 10, col = 0x2f7d3a) {
   const lm = new THREE.MeshStandardMaterial({ color: col, roughness: .6, side: THREE.DoubleSide });
   for (let i = 0; i < leaves; i++) {
     const piv = new THREE.Group(); piv.position.y = h; piv.rotation.y = i * 2 * PI / leaves + rand() * .4;
-    const geo = new THREE.PlaneGeometry(.34, 1.2 + rand() * .3, 1, 4).translate(0, .6, 0), p = geo.attributes.position;
+    const geo = new THREE.PlaneGeometry(.34, 0.95 + rand() * .2, 1, 4).translate(0, .5, 0), p = geo.attributes.position;
     for (let k = 0; k < p.count; k++) { const y = p.getY(k); p.setZ(k, -y * y * .22); p.setX(k, p.getX(k) * (1 - y * .35)); }
     geo.computeVertexNormals(); const lf = new THREE.Mesh(geo, lm); lf.rotation.x = .55 + rand() * .45; lf.castShadow = true; piv.add(lf); g.add(piv);
   }
@@ -438,7 +444,7 @@ function ficus() {
   const g = new THREE.Group(); cy(g, .22, .17, .38, mat(0xece8e1, .5), 0, 0, 0); cy(g, .03, .05, 1.1, mat(0x6b5236), 0, .38, 0, 8);
   for (let i = 0; i < 40; i++) {
     const lf = new THREE.Mesh(new THREE.SphereGeometry(.09, 8, 6), mat(rand() < .5 ? 0x3a8a3c : 0x2f7a34, .6)); lf.scale.set(1, .25, 1.7);
-    lf.position.set((rand() - .5) * .75, 1.2 + rand() * .75, (rand() - .5) * .75); lf.rotation.set(rand() * 3, rand() * 3, rand() * 3); lf.castShadow = true; g.add(lf);
+    lf.position.set((rand() - .5) * .42, 1.2 + rand() * .7, (rand() - .5) * .42); lf.rotation.set(rand() * 3, rand() * 3, rand() * 3); lf.castShadow = true; g.add(lf);
   }
   return g;
 }
@@ -506,7 +512,7 @@ function ficus() {
     rb(furn, .035, .72, 1.25, .012, mat(0x0a0b0d, .12, .5), tvx, .64, tvz, 2);
     bx(furn, .006, .66, 1.19, mat(0x070b12, .08, .2, { emissive: 0x0d1c30, emissiveIntensity: .8 }), tvx - .02, .67, tvz);
     colRect(655, 283, 686, 437, 1); }
-  put(ficus(), 668, 456, 0, [660, 446, 678, 466]);
+  put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
   { const g = new THREE.Group(); cy(g, .16, .16, .02, M.dark, 0, 0, 0); cy(g, .012, .012, 1.5, M.brass, 0, .02, 0, 8); cy(g, .13, .2, .26, mat(0xf4efe4, .6, 0, { emissive: 0xffe4ad, emissiveIntensity: .4 }), 0, 1.5, 0, 20); put(g, 400, 280, 0, [392, 272, 408, 288]); }
   // dining
   { const g = new THREE.Group();
@@ -526,7 +532,7 @@ function ficus() {
 /* ---------------------------------------------------------------- NORTH BEDROOM + BATH */
 {
   put(bed(1.0, 1.95), 980, 284, 0, [944, 214, 1016, 354]);
-  put(desk(1.3, .6), 852, 463, PI, [806, 441, 899, 485]); put(chair(0x2f343a), 852, 418);
+  put(desk(1.0, .6), 900, 229, 0, [862, 207, 936, 251]); put(chair(0x2f343a), 900, 272, PI);
   put(wardrobe(1.5, .58), 962, 462, PI, [908, 441, 1016, 485]);
   rug(950, 330, 1.6, 2.3, 0xd9cdb8);
   put(toilet(), 722, 238, PI / 2, [708, 222, 740, 255]);
@@ -566,8 +572,8 @@ function ficus() {
 }
 /* ---------------------------------------------------------------- TERRACE + ENTRANCE */
 {
-  put(palm(2.1, 12), 322, 78, 0, [308, 64, 338, 94]); put(palm(1.4, 9, 0x3d8c43), 335, 135, 0);
-  put(bush(.6), 700, 66, 0, [686, 52, 714, 80]); put(bush(.5, 0xb64fd6), 698, 138, 0, [684, 124, 712, 152]);
+  put(palm(2.1, 12), 372, 100, 0, [358, 86, 386, 114]); put(palm(1.4, 9, 0x3d8c43), 362, 152, 0, [352, 142, 372, 162]);
+  put(bush(.6), 650, 100, 0, [636, 86, 664, 114]); put(bush(.5, 0xb64fd6), 655, 152, 0, [642, 140, 668, 164]);
   const mk = () => { const g = new THREE.Group(); rb(g, .55, .07, .55, .03, mat(0x4a4f55, .5), 0, .43, 0); rb(g, .55, .4, .08, .03, mat(0x4a4f55, .5), 0, .5, -.25).rotation.x = -.15; for (const [x, z] of [[-.22, -.22], [.22, -.22], [-.22, .22], [.22, .22]]) cy(g, .02, .015, .45, mat(0x2b2f33, .5, .6), x, 0, z, 8); return g; };
   put(mk(), 600, 78, 0); put(mk(), 600, 134, PI); put(mk(), 568, 106, PI / 2); put(mk(), 632, 106, -PI / 2);
   const tb = new THREE.Group(); cy(tb, .4, .4, .04, mat(0x4a4f55, .5), 0, .72, 0, 32); cy(tb, .03, .03, .72, mat(0x2b2f33, .5, .6), 0, 0, 0, 8); cy(tb, .22, .22, .03, mat(0x2b2f33, .5, .6), 0, 0, 0, 16); put(tb, 600, 106, 0, [582, 88, 618, 124]);
@@ -659,6 +665,16 @@ function bake(root) {
     if (mg) add(mg); else b.list.forEach(add);
   }
 }
+// soft contact shadows under furniture (fake ambient occlusion, free at runtime)
+{
+  const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d'), gr = g.createRadialGradient(32, 32, 6, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(0,0,0,.5)'); gr.addColorStop(.6, 'rgba(0,0,0,.28)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  const bt = new THREE.CanvasTexture(c), bm = new THREE.MeshBasicMaterial({ map: bt, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
+  for (const [x1, y1, x2, y2] of mapFurn) {
+    const w = (x2 - x1) * S + .5, d = (y2 - y1) * S + .5, m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), bm);
+    m.rotation.x = -PI / 2; m.position.set(wx((x1 + x2) / 2), .006, wz((y1 + y2) / 2)); m.userData.keep = true; m.renderOrder = 1; floorG.add(m);
+  }
+}
 [wallsG, headersG, ceilG, furn, floorG, wardG].forEach(bake);
 
 /* ---------------------------------------------------------------- labels + marker */
@@ -718,7 +734,7 @@ function startTour() { started = true; $('start').classList.add('hidden'); ['roo
 $('startList').innerHTML = touchMode
   ? '<li>ג׳ויסטיק וירטואלי בצד שמאל – הליכה קדימה/אחורה/הצידה</li><li>החלקה בצד ימין של המסך – סיבוב זווית הראייה</li><li>כפתור ״מעבר מהיר״ – קפיצה לחדר</li><li>מפה קטנה – הקשה על המפה מעבירה אותך למקום</li>'
   : '<li>W A S D או חיצים – תנועה · Shift – ריצה</li><li>גרירת עכבר (או קליק לנעילת עכבר) – סיבוב מבט</li><li>מקש M – מעבר בין גוף ראשון למבט-על</li><li>מפה קטנה – קליק עליה מעביר אותך למקום · ״מעבר מהיר״ – קפיצה לחדר</li>';
-$('goFP').onclick = () => { teleport(258, 562, 560, 560); startTour(); setMode('fp'); if (!touchMode) canvas.requestPointerLock?.(); };
+$('goFP').onclick = () => { teleport(258, 562, 560, 560); startTour(); setMode('fp'); if (!touchMode) Promise.resolve(canvas.requestPointerLock?.()).catch(() => {}); };
 $('goOrbit').onclick = () => { startTour(); setMode('orbit'); };
 
 addEventListener('keydown', e => {
@@ -738,7 +754,7 @@ canvas.addEventListener('pointermove', e => {
   if (document.pointerLockElement === canvas) look(mx, my, .0022);
   else if (drag && drag.id === e.pointerId) { drag.moved += Math.abs(mx) + Math.abs(my); look(mx, my, .0035); }
 });
-canvas.addEventListener('pointerup', e => { if (drag && drag.id === e.pointerId) { if (drag.moved < 5 && document.pointerLockElement !== canvas) canvas.requestPointerLock?.(); drag = null; } });
+canvas.addEventListener('pointerup', e => { if (drag && drag.id === e.pointerId) { if (drag.moved < 5 && document.pointerLockElement !== canvas) Promise.resolve(canvas.requestPointerLock?.()).catch(() => {}); drag = null; } });
 const joy = $('joy'), knob = $('knob'), pad = $('lookpad'); let joyId = null, padId = null, lx = 0, ly = 0;
 function moveJoy(e) {
   const r = joy.getBoundingClientRect(), cx = r.left + r.width / 2, cy2 = r.top + r.height / 2, max = r.width / 2 - 8;
@@ -804,20 +820,17 @@ async function ensurePost() {
   if (composer || postLoading) return; postLoading = true;
   try {
     const A = 'three/addons/postprocessing/';
-    const [{ EffectComposer }, { RenderPass }, { GTAOPass }, { UnrealBloomPass }, { OutputPass }, { SMAAPass }] = await Promise.all(['EffectComposer', 'RenderPass', 'GTAOPass', 'UnrealBloomPass', 'OutputPass', 'SMAAPass'].map(n => import(A + n + '.js')));
+    const [{ EffectComposer }, { RenderPass }, { UnrealBloomPass }, { OutputPass }, { SMAAPass }] = await Promise.all(['EffectComposer', 'RenderPass', 'UnrealBloomPass', 'OutputPass', 'SMAAPass'].map(n => import(A + n + '.js')));
     const w = Math.max(2, innerWidth), h = Math.max(2, innerHeight), pr = pixelRatio;
     const rt = new THREE.WebGLRenderTarget(w * pr, h * pr, { type: THREE.HalfFloatType });
     const c = new EffectComposer(renderer, rt); c.setPixelRatio(pr); c.setSize(w, h);
     c.addPass(new RenderPass(scene, camera));
-    ao = new GTAOPass(scene, camera, w, h);
-    ao.updateGtaoMaterial({ radius: .55, distanceExponent: 1.4, thickness: 1.2, scale: 1.1, samples: 12, distanceFallOff: 1 });
-    ao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 12 }); ao.blendIntensity = .9; c.addPass(ao);
     bloom = new UnrealBloomPass(new THREE.Vector2(w, h), .14, .7, .93); c.addPass(bloom);
     c.addPass(new OutputPass()); c.addPass(new SMAAPass(w * pr, h * pr));
     composer = c; applyLevel(qLevel);
   } catch (err) { console.warn('post-processing unavailable', err); qMode = 'low'; qLevel = 0; refreshQ(); }
 }
-function applyLevel(l) { qLevel = l; if (l > 0) ensurePost(); if (ao) ao.enabled = l >= 2; if (bloom) bloom.enabled = l >= 1; }
+function applyLevel(l) { qLevel = l; if (l > 0) ensurePost(); if (ao) ao.enabled = l >= 2; if (bloom) bloom.enabled = l >= 2; }
 function setPR(v) { pixelRatio = v; renderer.setPixelRatio(v); resize(); }
 const QNAMES = { auto: 'אוטומטי', high: 'גבוהה', mid: 'בינונית', low: 'בסיסית' };
 function refreshQ() { $('bQ').textContent = '✨ איכות: ' + QNAMES[qMode]; $('bQ').classList.toggle('on', qMode === 'high'); }
@@ -894,6 +907,9 @@ new MutationObserver(sweep).observe(document.documentElement,{childList:true,sub
 </script>
 </body>
 </html>
+
+
+
 
 
 
