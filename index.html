@@ -382,7 +382,7 @@ addWall(803, 490, 803, 733, [[530, 635, 'door', dl('b', -1, 0x8c949b, 165)]]);
 addWall(412, 733, 1022, 733, [[515, 575, 'door', dl('a', 1, DOORW, 140)], [715, 800, 'door', dl('a', -1, DOORW, 170)]]);
 addWall(412, 654, 412, 962, [[662, 725, 'door', dl('a', -1, DOORW, 88)]]);
 addWall(231, 654, 412, 654);
-addWall(231, 853, 412, 853, [[262, 312, 'door', dl('a', 1, DOORW, 110)]]);
+addWall(231, 853, 412, 853, [[297, 350, 'door', dl('a', 1, DOORW, 110)]]);
 addWall(650, 733, 650, 962);
 addWall(912, 733, 912, 962, [[820, 880, 'door', dl('a', 1, DOORW, 80)]]);
 addWall(150, 505, 150, 620); addWall(150, 505, 231, 505); addWall(150, 620, 231, 620);
@@ -425,8 +425,11 @@ function desk(w = 1.2, d = .6) {
   rb(g, .56, .33, .025, .01, mat(0x0d1014, .3, 0, { emissive: 0x16305a, emissiveIntensity: .9 }), 0, .93, -.14);
   rb(g, .12, .2, .05, .01, mat(0x222428, .5), 0, .76, -.14); rb(g, .42, .018, .15, .006, mat(0x2a2d33), 0, .757, .1); rb(g, .06, .03, .1, .012, mat(0xdddddd, .4), .32, .757, .1);
   cy(g, .032, .028, .09, mat(0xe9e4da, .4), w / 2 - .1, .755, .14, 18);   // mug
-  { const nb = rb(g, .2, .014, .15, .004, mat(0x2f4a6b, .7), -w / 2 + .22, .755, .12, 2); nb.rotation.y = .12; rb(g, .19, .004, .14, .002, mat(0xf6f3ea, .9), -w / 2 + .22, .769, .12, 2).rotation.y = .12; cy(g, .004, .004, .14, mat(0x1d1f22, .4, .5), -w / 2 + .3, .772, .12, 6).rotation.z = PI / 2; }
-  { cy(g, .07, .075, .014, mat(0x2c2f34, .4, .5), -w / 2 + .14, .755, -.2, 20); const ar = cy(g, .006, .006, .34, mat(0x2c2f34, .4, .5), -w / 2 + .14, .76, -.2, 8); ar.rotation.z = .25; const sh = cy(g, .02, .06, .08, mat(0xf4efe4, .5, 0, { emissive: 0xffe4b0, emissiveIntensity: .5 }), -w / 2 + .2, 1.03, -.2, 18); sh.rotation.z = .25; }
+  { const nbx = -w / 2 + .17; rb(g, .15, .014, .11, .004, mat(0x2f4a6b, .7), nbx, .755, .21, 2); rb(g, .14, .004, .1, .002, mat(0xf6f3ea, .9), nbx, .769, .21, 2); cy(g, .004, .004, .12, mat(0x1d1f22, .4, .5), nbx, .774, .21, 6).rotation.z = PI / 2; }
+  { const lg = new THREE.Group(), lm = mat(0x2c2f34, .4, .5); lg.position.set(-w / 2 + .1, .755, -.17);
+    cy(lg, .07, .075, .014, lm, 0, 0, 0, 24); cy(lg, .006, .006, .32, lm, 0, .014, 0, 8); cy(lg, .016, .016, .03, lm, 0, .33, 0, 12);
+    const sh = new THREE.Mesh(new THREE.CylinderGeometry(.03, .075, .1, 24, 1, true), mat(0xf4efe4, .5, 0, { emissive: 0xffe4b0, emissiveIntensity: .55, side: THREE.DoubleSide })); sh.position.set(0, .36, .035); sh.rotation.x = .5; sh.castShadow = true; lg.add(sh);
+    const bulb = new THREE.Mesh(new THREE.SphereGeometry(.02, 10, 8), new THREE.MeshBasicMaterial({ color: 0xfff0c0 })); bulb.position.set(0, .345, .02); lg.add(bulb); g.add(lg); }
   return g;
 }
 function bed(w, l, duvet = 0x9ebfe8, wood = 0x8a6a47, uph = 0xcfc6b8) {
@@ -470,7 +473,7 @@ function vanity(w = .6, d = .45) {
   const sp = new THREE.Mesh(new THREE.CylinderGeometry(.013, .013, .15, 12).rotateX(PI / 2), CHROME); sp.position.set(0, 1.04, -d / 2 + .14); sp.castShadow = true; g.add(sp);
   cy(g, .012, .012, .05, CHROME, .05, 1.02, -d / 2 + .07, 8);
   cy(g, .03, .03, .12, mat(0xdfe6ea, .3), w / 2 - .07, .8, -d / 2 + .1, 14); cy(g, .028, .024, .09, mat(0xe8e4dc, .5), -w / 2 + .07, .8, -d / 2 + .1, 14);   // soap pump + cup
-  rb(g, w * .85 + .04, .74, .03, .012, mat(0x2c2a26, .5), 0, 1.13, -d / 2 - .005, 2); bx(g, w * .85, .7, .02, mat(0xbfd9ea, .05, .8), 0, 1.15, -d / 2 + .004);
+  rb(g, w * .68 + .04, .72, .03, .012, mat(0x2c2a26, .5), 0, 1.14, -d / 2 - .005, 2); bx(g, w * .68, .68, .02, mat(0xbfd9ea, .05, .8), 0, 1.16, -d / 2 + .004);
   return g;
 }function tub(w = .72, l = 1.6) {
   const g = new THREE.Group(), p = M.porc, t = .07, h = .55;
@@ -579,9 +582,15 @@ function modelFromData(D, mapping) {
 /* ---------------------------------------------------------------- KITCHEN */
 {
   const hd = M.brass;
-  const counter = (x1, y1, x2, y2, front) => {
+  const counter = (x1, y1, x2, y2, front, hole) => {
     bxPx(furn, x1, y1, x2, y2, .1, .74, M.cab); bxPx(furn, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0, .1, M.dark);
-    bxPx(furn, x1 - .8, y1 - .8, x2 + .8, y2 + 1.4, .84, .04, M.granite);
+    if (hole) {   // real opening in the stone top with a stainless basin sunk into it
+      const [hx1, hy1, hx2, hy2] = hole, X1 = x1 - .8, Y1 = y1 - .8, X2 = x2 + .8, Y2 = y2 + 1.4, sm = mat(0x8e949a, .45, .7);
+      bxPx(furn, X1, Y1, hx1, Y2, .84, .04, M.granite); bxPx(furn, hx2, Y1, X2, Y2, .84, .04, M.granite); bxPx(furn, hx1, Y1, hx2, hy1, .84, .04, M.granite); bxPx(furn, hx1, hy2, hx2, Y2, .84, .04, M.granite);
+      bxPx(furn, hx1 + .2, hy1 + .2, hx1 + 1.4, hy2 - .2, .7, .18, sm); bxPx(furn, hx2 - 1.4, hy1 + .2, hx2 - .2, hy2 - .2, .7, .18, sm); bxPx(furn, hx1 + .2, hy1 + .2, hx2 - .2, hy1 + 1.4, .7, .18, sm); bxPx(furn, hx1 + .2, hy2 - 1.4, hx2 - .2, hy2 - .2, .7, .18, sm); bxPx(furn, hx1, hy1, hx2, hy2, .69, .02, sm);
+      bxPx(furn, hx1 - 1, hy1 - 1, hx2 + 1, hy1, .88, .008, sm); bxPx(furn, hx1 - 1, hy2, hx2 + 1, hy2 + 1, .88, .008, sm); bxPx(furn, hx1 - 1, hy1, hx1, hy2, .88, .008, sm); bxPx(furn, hx2, hy1, hx2 + 1, hy2, .88, .008, sm);
+      cy(furn, .035, .035, .006, CHROME, wx((hx1 + hx2) / 2), .71, wz((hy1 + hy2) / 2), 18); cy(furn, .02, .02, .003, M.dark, wx((hx1 + hx2) / 2), .716, wz((hy1 + hy2) / 2), 14);
+    } else bxPx(furn, x1 - .8, y1 - .8, x2 + .8, y2 + 1.4, .84, .04, M.granite);
     const len = Math.max(x2 - x1, y2 - y1) * S, n = Math.round(len / .6);
     for (let i = 0; i < n; i++) {
       const f = (i + .5) / n;
@@ -590,20 +599,20 @@ function modelFromData(D, mapping) {
     }
     colRect(x1, y1, x2, y2, 1);
   };
-  counter(92, 207, 375, 250, 's'); counter(92, 250, 135, 372, 'e');
+  counter(92, 207, 375, 250, 's', [205, 218, 251, 240]); counter(92, 250, 135, 372, 'e');
   const up = mat(0xeceae5, .45);
   for (const [a, b, c2, d] of [[92, 207, 195, 232], [262, 207, 375, 232]]) { rbPx(furn, a, b, c2, d, 1.45, .75, .012, up); for (let x = a + 24; x < c2 - 5; x += 24) bxPx(furn, x, d, x + .5, d + 1, 1.47, .71, M.dark); }
   rbPx(furn, 92, 250, 118, 278, 1.45, .75, .012, up); rbPx(furn, 92, 332, 118, 372, 1.45, .75, .012, up);
   rbPx(furn, 92, 278, 118, 332, 1.62, .1, .01, M.steel); bxPx(furn, 92, 295, 100, 315, 1.72, .88, M.steel);
-  rbPx(furn, 200, 215, 256, 243, .878, .012, .004, M.steel); rbPx(furn, 205, 220, 251, 238, .872, .014, .006, mat(0x6f767c, .3, .9));
-  cy(furn, .022, .024, .3, CHROME, wx(228), .88, wz(213), 14); { const sp = new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, .22, 10).rotateX(PI / 2), CHROME); sp.position.set(wx(228), 1.18, wz(213) + .11); sp.castShadow = true; furn.add(sp); } cy(furn, .012, .012, .09, CHROME, wx(228) + .07, .88, wz(213), 8); cy(furn, .03, .03, .005, M.dark, wx(228), .885, wz(232), 14);
+  
+  cy(furn, .022, .024, .3, CHROME, wx(228), .88, wz(213), 14); { const sp = new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, .22, 10).rotateX(PI / 2), CHROME); sp.position.set(wx(228), 1.18, wz(213) + .11); sp.castShadow = true; furn.add(sp); } cy(furn, .012, .012, .09, CHROME, wx(228) + .07, .88, wz(213), 8);
   rbPx(furn, 100, 270, 133, 336, .88, .012, .004, mat(0x0c0d10, .12, .3));
   for (const [dx, dy, r] of [[-8, -22, .05], [8, -22, .05], [-8, 20, .05], [8, 20, .05], [0, 0, .065]]) { cy(furn, r, r, .02, M.steel, wx(116 + dx), .89, wz(303 + dy), 18); cy(furn, r * .5, r * .5, .026, M.dark, wx(116 + dx), .89, wz(303 + dy), 14); }
   rbPx(furn, 94, 378, 142, 432, 0, 1.85, .02, mat(0xdfe3e6, .3, .5)); bxPx(furn, 142, 392, 144, 394, 1.1, .5, hd); bxPx(furn, 142, 420, 144, 422, .7, .3, hd);
   colRect(94, 378, 142, 432, 1);
   { const g = new THREE.Group(); cy(g, .12, .1, .08, mat(0xc9a56a, .6), 0, 0, 0, 20); for (const [x, z, c3] of [[-.04, 0, 0xd94a2b], [.04, .02, 0xe8b53a], [0, -.04, 0x7fb04a]]) { const f = new THREE.Mesh(new THREE.SphereGeometry(.045, 12, 10), mat(c3, .5)); f.position.set(x, .12, z); f.castShadow = true; g.add(f); } g.position.set(wx(300), .88, wz(228)); furn.add(g);
     const k = new THREE.Group(); cy(k, .07, .09, .16, M.steel, 0, 0, 0, 16); cy(k, .02, .02, .03, M.dark, 0, .16, 0, 8); k.position.set(wx(330), .88, wz(228)); furn.add(k); }
-  const pd = new THREE.Group(); for (const x of [165, 245, 325]) { cy(pd, .003, .003, .6, mat(0x333), wx(x), 2.0, wz(290), 4); cy(pd, .16, .22, .14, mat(0xf5f1e8, .6, 0, { emissive: 0xffe7b0, emissiveIntensity: .35 }), wx(x), 1.85, wz(290), 24); } ceilG.add(pd);
+  const pd = new THREE.Group(); for (const x of [165, 245, 325]) { cy(pd, .006, .006, .6, mat(0x333), wx(x), 2.0, wz(290), 4); cy(pd, .16, .22, .14, mat(0xf5f1e8, .6, 0, { emissive: 0xffe7b0, emissiveIntensity: .35 }), wx(x), 1.85, wz(290), 24); } ceilG.add(pd);
 }
 
 /* ---------------------------------------------------------------- LIVING + DINING */
@@ -648,7 +657,7 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
     for (const x of [-.5, 0, .5]) { const c1 = chair(0xd6d9dc, true); c1.position.set(x, 0, -.72); g.add(c1); const c2 = chair(0xd6d9dc, true); c2.position.set(x, 0, .72); c2.rotation.y = PI; g.add(c2); }
     potPlant(g, 0, .75, 0, 1);
     put(g, 605, 575, 0, [546, 538, 664, 614]);
-    const pd = new THREE.Group(); for (const x of [-.45, .45]) { cy(pd, .003, .003, .7, mat(0x333), x, 1.9, 0, 4); cy(pd, .14, .14, .28, mat(0xf4efe4, .5, 0, { emissive: 0xffe4ad, emissiveIntensity: .45 }), x, 1.62, 0, 24); }
+    const pd = new THREE.Group(); for (const x of [-.45, .45]) { cy(pd, .006, .006, .7, mat(0x333), x, 1.9, 0, 4); cy(pd, .14, .14, .28, mat(0xf4efe4, .5, 0, { emissive: 0xffe4ad, emissiveIntensity: .45 }), x, 1.62, 0, 24); }
     pd.position.set(wx(605), 0, wz(575)); ceilG.add(pd); }
   put(wardrobe(1.5, .34), 709, 470, PI / 2, [697, 415, 721, 525]); put(wardrobe(1.5, .34), 709, 590, PI / 2, [697, 535, 721, 645]);
   { const g = new THREE.Group(); rb(g, .8, .85, .3, .015, M.veneer, 0, 0, 0); rb(g, .5, .75, .02, .01, mat(0xbfd9ea, .04, .85), 0, 1.15, -.14); put(g, 262, 636, PI, [246, 625, 280, 646]);
@@ -678,9 +687,9 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
 }
 /* ---------------------------------------------------------------- PARENTS + ENSUITE */
 {
-  rug(812, 872, 2.3, 2.0, 0xd8cbb0);
-  put(bed(1.6, 1.95, 0xe9dfc4, 0x7b5b3e, 0xb9ad9a), 812, 881, PI, [755, 814, 869, 952]);   // headboard against the south wall
-  for (const x of [744, 884]) { const n = new THREE.Group(); rb(n, .34, .5, .36, .02, M.veneer, 0, 0, 0); cy(n, .09, .12, .2, mat(0xf3ecd9, .6, 0, { emissive: 0xffe0a0, emissiveIntensity: .3 }), 0, .5, 0, 20); put(n, x, 938, PI, [x - 12, 926, x + 12, 954]); }
+  rug(777, 872, 2.0, 1.9, 0xd8cbb0);
+  put(bed(1.4, 1.95, 0xe9dfc4, 0x7b5b3e, 0xb9ad9a), 777, 881, PI, [721, 814, 833, 952]);   // headboard against the south wall
+  // (bedside tables removed: they blocked the wardrobe / window; reading sconces are above the bed instead)
   put(wardrobe(2.8, .5), 676, 846, PI / 2, [656, 745, 692, 948]);
   bxPx(furn, 915, 745, 1018, 805, 0, .04, M.porc);
   bx(furn, 1.4, 2.0, .02, GLASS, wx(962), 0, wz(806)); cy(furn, .02, .02, 1.3, CHROME, wx(965), .9, wz(743), 12); cy(furn, .13, .13, .025, CHROME, wx(965), 2.15, wz(752), 24); { const a = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .14, 8).rotateX(PI / 2), CHROME); a.position.set(wx(965), 2.2, wz(745)); furn.add(a); }
@@ -693,8 +702,8 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
   put(toilet(), 262, 760, PI / 2, [240, 744, 285, 778]);
   put(vanity(.6, .45), 262, 690, PI / 2, [240, 672, 276, 708]);
   { const g = new THREE.Group(); rb(g, .6, .85, .6, .03, mat(0xf5f5f5, .3), 0, 0, 0); const d2 = cy(g, .22, .22, .02, mat(0x667a88, .1, .5), 0, .38, .3, 28); d2.rotation.x = PI / 2; put(g, 266, 820, PI / 2, [242, 800, 290, 842]); }
-  { const g = new THREE.Group(); const m = mat(0xe8e8e8, .4, .8); for (let i = 0; i < 5; i++) bx(g, .03, 1.0, .03, m, -.6 + i * .3, 0, 0); bx(g, 1.3, .03, .03, m, 0, 1.0, 0); put(g, 285, 905, 0, [260, 890, 318, 920]); }
-  { const g = new THREE.Group(); cy(g, .36, .36, .9, mat(0xf4f4f2, .4, .2), 0, 0, 0, 32); put(g, 368, 908, 0, [346, 886, 392, 930]); }
+  { const g = new THREE.Group(); const m = mat(0xe8e8e8, .4, .8); for (let i = 0; i < 5; i++) bx(g, .03, 1.0, .03, m, -.6 + i * .3, 0, 0); bx(g, 1.3, .03, .03, m, 0, 1.0, 0); put(g, 270, 905, 0, [243, 890, 297, 920]); }
+  { const g = new THREE.Group(); cy(g, .36, .36, .9, mat(0xf4f4f2, .4, .2), 0, 0, 0, 32); put(g, 383, 914, 0, [360, 892, 406, 936]); }
 }
 /* ---------------------------------------------------------------- TERRACE + ENTRANCE */
 {
@@ -740,14 +749,14 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
   for (let i = 0; i < 12; i++) { const a = i / 12 * 2 * PI, x = Math.cos(a) * .5, z = Math.sin(a) * .5;
     const b = new THREE.Mesh(new THREE.SphereGeometry(.034, 10, 8), bulb); b.position.set(x, 2.04, z); g.add(b);
     const c = new THREE.Mesh(new THREE.OctahedronGeometry(.032), crystal); c.scale.y = 2; c.position.set(x, 1.93, z); g.add(c); }
-  for (let i = 0; i < 3; i++) { const a = i / 3 * 2 * PI + .5; const cord = new THREE.Mesh(new THREE.CylinderGeometry(.004, .004, .62, 4), gold); cord.position.set(Math.cos(a) * .3, 2.45, Math.sin(a) * .3); g.add(cord); }
+  for (let i = 0; i < 3; i++) { const a = i / 3 * 2 * PI + .5; const cord = new THREE.Mesh(new THREE.CylinderGeometry(.006, .006, .62, 6), gold); cord.position.set(Math.cos(a) * .3, 2.45, Math.sin(a) * .3); g.add(cord); }
   const core = new THREE.Mesh(new THREE.SphereGeometry(.08, 12, 10), bulb); core.position.y = 2.14; g.add(core);
   g.position.set(wx(543), 0, wz(372)); ceilG.add(g);
   // full-length drapes
   const dr = (x1, x2, y, dir) => { const n = Math.round((x2 - x1) / 5), cm = mat(0xcdbfa8, .95);
     for (let i = 0; i < n; i++) { const x = x1 + (x2 - x1) * (i + .5) / n; bx(furn, (x2 - x1) / n * S * 1.05, 2.45, .05, cm, wx(x), .05, wz(y) + dir * (i % 2 ? .035 : 0)); }
     bx(furn, (x2 - x1) * S, .03, .03, mat(0x777b80, .4, .8), wx((x1 + x2) / 2), 2.5, wz(y) + dir * .02); };
-  dr(488, 514, 951, -1); dr(558, 584, 951, -1); dr(821, 847, 951, -1); dr(893, 919, 951, -1); bx(furn, 96 * S, .03, .03, mat(0x777b80, .4, .8), wx(536), 2.5, wz(951)); bx(furn, 98 * S, .03, .03, mat(0x777b80, .4, .8), wx(870), 2.5, wz(951));
+  dr(488, 514, 951, -1); dr(558, 584, 951, -1); dr(837, 850, 951, -1); dr(890, 905, 951, -1); bx(furn, 96 * S, .03, .03, mat(0x777b80, .4, .8), wx(536), 2.5, wz(951)); bx(furn, 98 * S, .03, .03, mat(0x777b80, .4, .8), wx(870), 2.5, wz(951));
   // mirror in the parents' room
   { const m = new THREE.Group(); rb(m, .04, 1.5, .8, .02, mat(0x2c2a26, .5), 0, .45, 0); rb(m, .02, 1.4, .7, .01, mat(0xbfd9ea, .03, .9), -.015, .5, 0); m.position.set(wx(905), 0, wz(786)); furn.add(m); }
   // towels on the tub rim and a corner plant in the parents' room
@@ -773,7 +782,7 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
     for (const s of [-1, 1]) rb(g, .02, .02, .07, .006, CHROME, s * w / 2, 1.07, .035, 2);
     rb(g, w * .82, .55, .03, .012, mat(0xf1ede4, .95), 0, .56, .1, 2); rb(g, w * .82, .02, .034, .008, mat(0x9fc7cf, .95), 0, .6, .1, 2);
     g.position.set(wx(px), 0, wz(py)); g.rotation.y = FR[face]; furn.add(g); };
-  bar(300, 661, 's', .7); bar(790, 397, 'n', .45);
+  bar(300, 661, 's', .7); bar(772, 214, 's', .45);
   const tp = (px, py, face) => { const g = new THREE.Group(); rb(g, .14, .03, .05, .01, CHROME, 0, .65, .025, 2); const r = cy(g, .055, .055, .1, mat(0xfbfbf8, .9), 0, .62, .06, 16); r.rotation.z = PI / 2; g.position.set(wx(px), 0, wz(py)); g.rotation.y = FR[face]; furn.add(g); };
   tp(238, 786, 'e'); tp(698, 262, 'e'); tp(968, 955, 'n');
   // kitchen: oven front under the hob, board + knife block, utensil rail, dish rack
@@ -782,7 +791,7 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
   bx(furn, .7, .012, .012, CHROME, wx(330), 1.28, wz(209)); for (let i = 0; i < 4; i++) { const u = cy(furn, .006, .006, .24, CHROME, wx(310 + i * 8), 1.04, wz(210.5), 6); }
   // living: vase + bowl on the TV unit, framed photos on the unit
   { potPlant(furn, wx(662), .5, wz(300), .72);
-    const b = new THREE.Group(); cy(b, .095, .065, .06, mat(0xb4623a, .6), 0, .5, 0, 24); b.position.set(wx(661), 0, wz(425)); furn.add(b); }
+    const cj = new THREE.Group(); cy(cj, .05, .047, .1, mat(0xece6da, .25, 0, { transparent: true, opacity: .8 }), 0, 0, 0, 24); cy(cj, .042, .04, .06, mat(0xf6f1e6, .7), 0, .0, 0, 24); cy(cj, .002, .002, .018, mat(0x2b2b2b, .8), 0, .1, 0, 6); { const fl = new THREE.Mesh(new THREE.SphereGeometry(.011, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffb860 })); fl.scale.y = 1.7; fl.position.y = .125; cj.add(fl); } cj.position.set(wx(664), .5, wz(425)); furn.add(cj); }
 }
 /* ---------------------------------------------------------------- detail pass 2: books, clock, shelf, art, entrance + kitchen + bath details */
 {
@@ -791,31 +800,31 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
   const bookStack = n => { const g = new THREE.Group(); let y = 0; for (let i = 0; i < n; i++) { const h = .022 + rand() * .014; rb(g, .2 + rand() * .03, h, .14 + rand() * .02, .004, mat(BC[(rand() * 6) | 0], .7), (rand() - .5) * .012, y, (rand() - .5) * .01, 2).rotation.y = (rand() - .5) * .3; y += h; } return g; };
   // parents' room: open book + reading glasses on the duvet, phone + water glass + clock on the nightstands
   { const bk = new THREE.Group(); rb(bk, .2, .012, .15, .004, mat(0x7a3b2a, .7), -.1, 0, 0, 2); rb(bk, .2, .012, .15, .004, mat(0x7a3b2a, .7), .1, 0, 0, 2).rotation.z = .0; rb(bk, .19, .014, .14, .002, mat(0xf6f3ea, .9), -.1, .01, 0, 2); rb(bk, .19, .014, .14, .002, mat(0xf6f3ea, .9), .1, .01, 0, 2);
-    wp(bk, 842, 840, .575, .35); const gl = new THREE.Group(); for (const s of [-1, 1]) { const r = new THREE.Mesh(new THREE.TorusGeometry(.022, .003, 6, 16), mat(0x2c2f34, .4, .5)); r.rotation.x = PI / 2; r.position.set(s * .03, .003, 0); gl.add(r); } wp(gl, 826, 846, .58, .3);
-    const ph = new THREE.Group(); rb(ph, .07, .008, .14, .006, mat(0x15171a, .2, .4), 0, 0, 0, 2); wp(ph, 884, 944, .5, .4);
-    const wg = new THREE.Group(); cy(wg, .032, .028, .1, mat(0xdff2f6, .05, 0, { transparent: true, opacity: .45 }), 0, 0, 0, 16); cy(wg, .03, .026, .06, mat(0xbfe3ee, .1, 0, { transparent: true, opacity: .5 }), 0, 0, 0, 16); wp(wg, 893, 934, .5);
-    const ck = new THREE.Group(); cy(ck, .04, .04, .035, mat(0x2c2f34, .5, .3), 0, 0, 0, 20).rotation.x = 0; rb(ck, .06, .004, .003, .001, mat(0xffffff, .5), 0, .036, .02, 2); wp(ck, 744, 946, .5, .0); }
+    wp(bk, 790, 840, .575, .35); const gl = new THREE.Group(); for (const s of [-1, 1]) { const r = new THREE.Mesh(new THREE.TorusGeometry(.022, .003, 6, 16), mat(0x2c2f34, .4, .5)); r.rotation.x = PI / 2; r.position.set(s * .03, .003, 0); gl.add(r); } wp(gl, 774, 846, .58, .3);
+    }
   // S bedroom: shelf with books, vase and a small plant (north wall, facing the room)
   { const sh = new THREE.Group(); rb(sh, .95, .03, .2, .008, M.veneer, 0, 0, 0, 2); for (const x of [-.4, .4]) rb(sh, .02, .08, .04, .005, CHROME, x, -.07, -.08, 2);
-    let x = -.42; for (let i = 0; i < 7; i++) { const w = .025 + rand() * .015, h = .17 + rand() * .06; rb(sh, w, h, .14, .004, mat(BC[i % 6], .7), x + w / 2, .03, 0, 2).rotation.z = i === 6 ? -.18 : 0; x += w + .003; }
+    let x = -.42; for (let i = 0; i < 7; i++) { const w = .025 + rand() * .015, h = .17 + rand() * .06; rb(sh, w, h, .14, .004, mat(BC[i % 6], .7), x + w / 2, .03, 0, 2).rotation.z = 0; x += w + .003; }
     cy(sh, .05, .04, .22, mat(0xe9e4da, .25), .22, .03, 0, 18); const pl = potPlant(sh, .36, .03, 0, .75);
     wp(sh, 462, 745, 1.5, 0); }
   // art above the bed heads
   const artTex = cols => ctex(256, 160, (g, w, h) => { g.fillStyle = cols[0]; g.fillRect(0, 0, w, h); for (let i = 0; i < 6; i++) { g.fillStyle = cols[1 + i % (cols.length - 1)]; g.globalAlpha = .8; g.beginPath(); g.ellipse(rand() * w, rand() * h, 30 + rand() * 60, 18 + rand() * 30, rand() * 3, 0, 7); g.fill(); } g.globalAlpha = 1; }, 1, 1);
   const art = (px, py, rot, w, h, y, cols) => { const g = new THREE.Group(); bx(g, w + .05, h + .05, .025, mat(0x23272c, .5), 0, 0, 0); const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: artTex(cols), roughness: .8 })); p.position.set(0, h / 2 + .025, .014); g.add(p); wp(g, px, py, y, rot); };
-  art(812, 954, PI, 1.3, .6, 1.5, ['#efe6d3', '#b9a283', '#8a6a47', '#d9c9a8']); art(452, 954, PI, .8, .5, 1.45, ['#eef0f2', '#8fb8de', '#5a6b86', '#d6a2ad']);
+  art(777, 954, PI, 1.1, .55, 1.5, ['#efe6d3', '#b9a283', '#8a6a47', '#d9c9a8']); art(452, 954, PI, .8, .5, 1.45, ['#eef0f2', '#8fb8de', '#5a6b86', '#d6a2ad']);
   // dining-wall clock
   { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); g.fillStyle = '#faf8f2'; g.beginPath(); g.arc(64, 64, 62, 0, 7); g.fill(); g.strokeStyle = '#222'; g.lineWidth = 3; for (let i = 0; i < 12; i++) { const a = i * PI / 6; g.beginPath(); g.moveTo(64 + Math.sin(a) * 52, 64 - Math.cos(a) * 52); g.lineTo(64 + Math.sin(a) * 58, 64 - Math.cos(a) * 58); g.stroke(); } g.lineWidth = 5; g.beginPath(); g.moveTo(64, 64); g.lineTo(64 + Math.sin(.9) * 28, 64 - Math.cos(.9) * 28); g.stroke(); g.lineWidth = 3; g.beginPath(); g.moveTo(64, 64); g.lineTo(64 + Math.sin(3.4) * 42, 64 - Math.cos(3.4) * 42); g.stroke();
     const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; const ck = new THREE.Group(); const face = new THREE.Mesh(new THREE.CircleGeometry(.17, 40), new THREE.MeshStandardMaterial({ map: tx, roughness: .6 })); face.position.z = .02; ck.add(face); const rim = new THREE.Mesh(new THREE.TorusGeometry(.17, .012, 8, 40), mat(0x2c2f34, .4, .4)); rim.position.z = .02; ck.add(rim); wp(ck, 684, 612, 1.85, -PI / 2); }
   // entrance: shoes on the mat, umbrella stand in the corner
   for (const [x, y, r] of [[194, 566, .1], [186, 556, -.12]]) { const s = new THREE.Group(); rb(s, .1, .07, .27, .03, mat(0x2b2b2b, .6), 0, 0, 0, 3); rb(s, .09, .02, .1, .01, mat(0xf0f0f0, .7), 0, .07, .05, 2); wp(s, x, y, .02, r); }
-  { const g = new THREE.Group(); cy(g, .1, .085, .5, mat(0x3a3f45, .6, .3), 0, 0, 0, 20); cy(g, .012, .012, .6, mat(0x1d1f22, .5), .02, .3, 0, 8); const hk = new THREE.Mesh(new THREE.TorusGeometry(.04, .01, 6, 12, PI), mat(0x1d1f22, .5)); hk.position.set(.02, .9, 0); g.add(hk); wp(g, 170, 516, 0); colRect(162, 508, 178, 524, 1); }
+  { const g = new THREE.Group(); cy(g, .1, .085, .5, mat(0x3a3f45, .6, .3), 0, 0, 0, 20); cy(g, .012, .012, .6, mat(0x1d1f22, .5), .02, .3, 0, 8); const hk = new THREE.Mesh(new THREE.TorusGeometry(.04, .01, 6, 12, PI), mat(0x1d1f22, .5)); hk.position.set(.02, .9, 0); g.add(hk); wp(g, 172, 523, 0); colRect(164, 515, 180, 531, 1); }
+  for (const sx of [738, 816]) { const g = new THREE.Group(); cy(g, .035, .035, .012, mat(0x2c2f34, .4, .5), 0, 0, 0, 16).rotation.x = PI / 2; const arm = cy(g, .008, .008, .12, mat(0x2c2f34, .4, .5), 0, 0, 0, 8); arm.rotation.x = PI / 2; arm.position.set(0, 0, .06);
+    const sh = new THREE.Mesh(new THREE.CylinderGeometry(.03, .06, .09, 20, 1, true), mat(0xf4efe4, .5, 0, { emissive: 0xffe4b0, emissiveIntensity: .6, side: THREE.DoubleSide })); sh.position.set(0, .0, .13); sh.rotation.x = -.35; g.add(sh); wp(g, sx, 955, 1.25, PI); }
   // kitchen: coffee machine; living: candle tray; terrace: lantern; main bath: mat; parents: slippers
   { const g = new THREE.Group(); rb(g, .2, .32, .28, .03, mat(0x1d1f22, .35, .3), 0, 0, 0, 3); rb(g, .16, .04, .02, .01, CHROME, 0, .12, .14, 2); cy(g, .02, .02, .1, mat(0xdfe6ea, .1), 0, 0, .1, 12); wp(g, 113, 358, .88, PI / 2); }
   { const g = new THREE.Group(); rb(g, .26, .015, .14, .006, M.veneer, 0, 0, 0, 2); for (const [x, h] of [[-.07, .06], [0, .1], [.07, .075]]) { cy(g, .025, .025, h, mat(0xf4efe4, .6), x, .015, 0, 14); const fl = new THREE.Mesh(new THREE.SphereGeometry(.009, 8, 6), new THREE.MeshBasicMaterial({ color: 0xffb860 })); fl.position.set(x, .02 + h, 0); g.add(fl); } wp(g, 543, 382, .43); }
   { const g = new THREE.Group(); cy(g, .06, .06, .02, mat(0x2c2f34, .5, .5), 0, 0, 0, 16); cy(g, .05, .05, .2, mat(0xffe9c8, .2, 0, { transparent: true, opacity: .55, emissive: 0xffc070, emissiveIntensity: .35 }), 0, .02, 0, 16); cy(g, .062, .05, .015, mat(0x2c2f34, .5, .5), 0, .22, 0, 16); wp(g, 485, 148, .41); }
   { const m = rb(furn, .5, .012, .8, .005, mat(0x9fc7cf, 1), wx(325), .004, wz(792), 2); }
-  for (const [x, y, r] of [[772, 806, .5], [788, 802, .35]]) { const s = new THREE.Group(); rb(s, .095, .04, .26, .02, mat(0xe9dfc4, .95), 0, 0, 0, 3); wp(s, x, y, .02, r); }
+  for (const [x, y, r] of [[768, 806, .5], [784, 802, .35]]) { const s = new THREE.Group(); rb(s, .095, .04, .26, .02, mat(0xe9dfc4, .95), 0, 0, 0, 3); wp(s, x, y, .02, r); }
 }
 /* ---------------------------------------------------------------- lights */
 const sun = new THREE.DirectionalLight(0xfff0d6, 4.2);
@@ -1344,6 +1353,11 @@ new MutationObserver(sweep).observe(document.documentElement,{childList:true,sub
 </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
