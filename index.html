@@ -27,6 +27,7 @@ button{font:inherit;color:#fff;cursor:pointer}
 html[dir=ltr] #bar button{text-align:left}html[dir=ltr] #start ul{text-align:left}#lHe.on,#lEn.on{background:var(--acc)}
 #tp{position:fixed;top:calc(var(--top) + 300px);left:max(10px,env(safe-area-inset-left));width:min(270px,62vw);max-height:calc(100% - var(--top) - 330px);overflow:auto;padding:10px;z-index:11;display:grid;grid-template-columns:1fr 1fr;gap:8px;touch-action:pan-y}
 .chip{padding:10px 6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;font-size:14px;text-align:center}
+#copy{font-size:9.5px;opacity:.6}
 #disc{position:fixed;bottom:3px;left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.7);z-index:9;pointer-events:none;padding:0 8px}
 #hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:8px 16px;font-size:13px;z-index:10;text-align:center;line-height:1.6;max-width:92vw;opacity:.92}
 #lookpad{position:fixed;top:0;bottom:0;right:0;width:56%;z-index:5}
@@ -81,7 +82,7 @@ a[href*="netlify.com"],a[href*="netlify.app/?"],[id*="netlify" i],[class*="netli
 <div id="lookpad" class="hidden"></div>
 <div id="joy" class="hidden"><div id="knob"></div></div>
 <div id="vig"></div>
-<div id="disc" data-x="1">הרהיטים וההדמיה נועדו להמחשה בלבד</div>
+<div id="disc" data-x="1"><span id="discT">הרהיטים וההדמיה נועדו להמחשה בלבד</span><br><span id="copy">כל הזכויות שמורות לחי קינן יזמות ובנייה בע"מ</span></div>
 <div id="flash"></div>
 
 <script type="module">
@@ -95,7 +96,7 @@ const $ = id => document.getElementById(id);
 let LANG = 'he';
 const EN = {
   'דישראלי 14': 'Disraeli 14', 'דירה מס׳ 7–9 · 5 חדרים · כ-125 מ״ר + מרפסת כ-14 מ״ר': 'Apartment 7–9 · 5 rooms · ~125 m² + ~14 m² balcony',
-  '🚶 התחל סיור בגובה עיניים': '🚶 Start the walkthrough', '🏠 מבט-על (בית בובות)': '🏠 Overview (dollhouse)', 'נמצאים ב:': 'You are in:', 'הרהיטים וההדמיה נועדו להמחשה בלבד': 'Furniture and visualization are for illustration only',
+  '🚶 התחל סיור בגובה עיניים': '🚶 Start the walkthrough', '🏠 מבט-על (בית בובות)': '🏠 Overview (dollhouse)', 'נמצאים ב:': 'You are in:', 'הרהיטים וההדמיה נועדו להמחשה בלבד': 'Furniture and visualization are for illustration only', 'כל הזכויות שמורות לחי קינן יזמות ובנייה בע"מ': 'All rights reserved to Chai Kinan Entrepreneurship and Construction Ltd.',
   '🏠 מבט-על': '🏠 Overview', '🚶 גוף ראשון': '🚶 First person', '📍 מעבר מהיר': '📍 Quick jump', '▶ סיור מודרך': '▶ Guided tour', '■ עצירת סיור': '■ Stop tour', 'רוצים אתר דומה או אחר? לחצו על הקישור או צרו קשר:': 'Want a similar or different website? Click the link or get in touch:', '🎥 סיור מבט-על': '🎥 Overview tour', 'הנוף מסביב': 'The surroundings', 'חדר שינה (צפון)': 'Bedroom (north)', 'שעה:': 'Time:',
   'צהריים': 'Noon', 'ערב': 'Evening', 'לילה': 'Night', 'בוקר': 'Morning',
   'ג׳ויסטיק (שמאל) – תנועה · החלקה בצד ימין – סיבוב מבט': 'Joystick (left) – move · swipe on the right – look around',
@@ -1331,7 +1332,7 @@ setTime('day');
 function applyLang() {
   const en = LANG === 'en'; document.documentElement.lang = en ? 'en' : 'he'; document.documentElement.dir = en ? 'ltr' : 'rtl'; document.title = en ? '3D walkthrough – Disraeli 14, apartment 7–9' : 'סיור תלת-ממדי – דישראלי 14, דירה 7–9';
   $('sTitle').textContent = T_('דישראלי 14'); $('sSub').textContent = T_('דירה מס׳ 7–9 · 5 חדרים · כ-125 מ״ר + מרפסת כ-14 מ״ר'); $('goFP').textContent = T_('🚶 התחל סיור בגובה עיניים'); $('goOrbit').textContent = T_('🏠 מבט-על (בית בובות)');
-  $('roomPre').textContent = T_('נמצאים ב:'); $('promoTxt').textContent = T_('רוצים אתר דומה או אחר? לחצו על הקישור או צרו קשר:'); $('disc').textContent = T_('הרהיטים וההדמיה נועדו להמחשה בלבד'); $('bTp').textContent = T_('📍 מעבר מהיר'); $('bTour').textContent = T_(tourOn ? '■ עצירת סיור' : '▶ סיור מודרך'); $('bOT').textContent = T_(ovOn ? '■ עצירת סיור' : '🎥 סיור מבט-על');
+  $('roomPre').textContent = T_('נמצאים ב:'); $('promoTxt').textContent = T_('רוצים אתר דומה או אחר? לחצו על הקישור או צרו קשר:'); $('discT').textContent = T_('הרהיטים וההדמיה נועדו להמחשה בלבד'); $('copy').textContent = T_('כל הזכויות שמורות לחי קינן יזמות ובנייה בע"מ'); $('bTp').textContent = T_('📍 מעבר מהיר'); $('bTour').textContent = T_(tourOn ? '■ עצירת סיור' : '▶ סיור מודרך'); $('bOT').textContent = T_(ovOn ? '■ עצירת סיור' : '🎥 סיור מבט-על');
   $('bL').textContent = en ? '🌐 עברית' : '🌐 English'; $('bView').textContent = T_(mode === 'fp' ? '🏠 מבט-על' : '🚶 גוף ראשון'); $('lHe').classList.toggle('on', !en); $('lEn').classList.toggle('on', en);
   SPOTS.forEach((s, i) => { $('tp').children[i].textContent = T_(s[0]); }); setStartList(); updateHint(); buildLabels(); setTime(curTime); lastRoom = '';
   if (tourOn) { const [, t, d] = TOUR[tourIdx]; $('cap').innerHTML = `<b>${T_(t)}</b><span>${T_(d)}</span>`; }
@@ -1355,6 +1356,7 @@ new MutationObserver(sweep).observe(document.documentElement,{childList:true,sub
 </script>
 </body>
 </html>
+
 
 
 
