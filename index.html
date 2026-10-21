@@ -42,6 +42,7 @@ html[dir=ltr] #bar button{text-align:left}html[dir=ltr] #start ul{text-align:lef
 #start ul{text-align:right;margin:12px auto 18px;padding:0 20px;line-height:1.9;font-size:14.5px;opacity:.95}
 .big{display:block;width:100%;padding:13px;margin-top:10px;font-size:17px;border-radius:12px;border:0;background:var(--acc);font-weight:600}
 .big.alt{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+#promo{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18);font-size:13.5px;line-height:1.8;opacity:.95}#promo a{color:#7fd0ff;text-decoration:none;font-weight:600}#promo a:hover{text-decoration:underline}
 #load{position:fixed;inset:0;z-index:40;background:#10202e;display:flex;align-items:center;justify-content:center;font-size:20px}
 /* hide host-injected "Powered by Netlify" badge/toolbars (the page itself never links to netlify) */
 a[href*="netlify.com"],a[href*="netlify.app/?"],[id*="netlify" i],[class*="netlify" i],iframe[src*="netlify"],#__netlify-drawer,netlify-drawer,.netlify-badge{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
@@ -59,6 +60,7 @@ a[href*="netlify.com"],a[href*="netlify.app/?"],[id*="netlify" i],[class*="netli
     <ul id="startList"></ul>
     <button class="big" id="goFP">🚶 התחל סיור בגובה עיניים</button>
     <button class="big alt" id="goOrbit">🏠 מבט-על (בית בובות)</button>
+    <div id="promo"><span id="promoTxt">רוצים אתר דומה או אחר? לחצו על הקישור או צרו קשר:</span><br><a href="https://dcreator-h.netlify.app/#services" target="_blank" rel="noopener">dcreator-h.netlify.app</a> &nbsp;·&nbsp; <a href="tel:0559112028" dir="ltr">055-9112028</a></div>
   </div>
 </div>
 
@@ -94,7 +96,7 @@ let LANG = 'he';
 const EN = {
   'דישראלי 14': 'Disraeli 14', 'דירה מס׳ 7–9 · 5 חדרים · כ-125 מ״ר + מרפסת כ-14 מ״ר': 'Apartment 7–9 · 5 rooms · ~125 m² + ~14 m² balcony',
   '🚶 התחל סיור בגובה עיניים': '🚶 Start the walkthrough', '🏠 מבט-על (בית בובות)': '🏠 Overview (dollhouse)', 'נמצאים ב:': 'You are in:', 'הרהיטים וההדמיה נועדו להמחשה בלבד': 'Furniture and visualization are for illustration only',
-  '🏠 מבט-על': '🏠 Overview', '🚶 גוף ראשון': '🚶 First person', '📍 מעבר מהיר': '📍 Quick jump', '▶ סיור מודרך': '▶ Guided tour', '■ עצירת סיור': '■ Stop tour', '🎥 סיור מבט-על': '🎥 Overview tour', 'הנוף מסביב': 'The surroundings', 'חדר שינה (צפון)': 'Bedroom (north)', 'שעה:': 'Time:',
+  '🏠 מבט-על': '🏠 Overview', '🚶 גוף ראשון': '🚶 First person', '📍 מעבר מהיר': '📍 Quick jump', '▶ סיור מודרך': '▶ Guided tour', '■ עצירת סיור': '■ Stop tour', 'רוצים אתר דומה או אחר? לחצו על הקישור או צרו קשר:': 'Want a similar or different website? Click the link or get in touch:', '🎥 סיור מבט-על': '🎥 Overview tour', 'הנוף מסביב': 'The surroundings', 'חדר שינה (צפון)': 'Bedroom (north)', 'שעה:': 'Time:',
   'צהריים': 'Noon', 'ערב': 'Evening', 'לילה': 'Night', 'בוקר': 'Morning',
   'ג׳ויסטיק (שמאל) – תנועה · החלקה בצד ימין – סיבוב מבט': 'Joystick (left) – move · swipe on the right – look around',
   'W A S D / חיצים – תנועה · גרירת עכבר – מבט · קליק – נעילת עכבר · Shift – ריצה · M – מבט-על': 'W A S D / arrows – move · drag mouse – look · click – lock mouse · Shift – run · M – overview',
@@ -258,7 +260,7 @@ const FLOORMAT = {
   conc: new THREE.MeshStandardMaterial({ map: T.conc, bumpMap: T.conc, bumpScale: .3, roughness: .9 })
 };
 const WALL = tmat('wall', 0xffffff, T.plaster, { bs: .7, r: .95 });
-const SKIRT = mat(0xffffff, .5), FRAME = mat(0x3b4046, .5, .3), STONE = mat(0xf4f2ee, .4);
+const SKIRT = mat(0xffffff, .5), FRAME = mat(0x3b4046, .8, 0), STONE = mat(0xf4f2ee, .4);
 const GLASS = new THREE.MeshPhysicalMaterial({ color: 0xcfe8f5, transparent: true, opacity: .1, roughness: .04, side: THREE.DoubleSide, depthWrite: false });
 
 /* ---------------------------------------------------------------- groups & data */
@@ -300,10 +302,10 @@ function wseg(horiz, c, a, b, y0, y1, tPx, m = WALL, collide = false, cast = tru
   const me = new THREE.Mesh(geo, m); me.position.set(px, py, pz); me.castShadow = cast; me.receiveShadow = true; grp.add(me);
 }
 function frameOpen(horiz, c, o0, o1, y0, y1) {
-  wseg(horiz, c, o0, o1, y0, y0 + .05, 8, FRAME); wseg(horiz, c, o0, o1, y1 - .05, y1, 8, FRAME);
-  wseg(horiz, c, o0, o0 + 3, y0, y1, 8, FRAME); wseg(horiz, c, o1 - 3, o1, y0, y1, 8, FRAME);
+  wseg(horiz, c, o0, o1, y0, y0 + .08, 8, FRAME); wseg(horiz, c, o0, o1, y1 - .08, y1, 8, FRAME);
+  wseg(horiz, c, o0, o0 + 4.5, y0, y1, 8, FRAME); wseg(horiz, c, o1 - 4.5, o1, y0, y1, 8, FRAME);
   const n = Math.max(1, Math.round((o1 - o0) * S / 1.1));
-  for (let k = 1; k < n; k++) { const p = o0 + (o1 - o0) * k / n; wseg(horiz, c, p - 1.2, p + 1.2, y0, y1, 8, FRAME); }
+  for (let k = 1; k < n; k++) { const p = o0 + (o1 - o0) * k / n; wseg(horiz, c, p - 1.8, p + 1.8, y0, y1, 8, FRAME); }
   wseg(horiz, c, o0, o1, y0, y1, 2, GLASS, false, false);
 }
 function addLeaf(horiz, c, o0, o1, sp) {
@@ -358,9 +360,9 @@ function addRail(x1, y1, x2, y2) {
   const horiz = y1 === y2, c = horiz ? y1 : x1, a0 = horiz ? Math.min(x1, x2) : Math.min(y1, y2), a1 = horiz ? Math.max(x1, x2) : Math.max(y1, y2);
   wseg(horiz, c, a0, a1, 0, .12, 7, mat(0xcfd2d4, .6));
   wseg(horiz, c, a0, a1, .1, 1.08, 2, GLASS, false, false);
-  wseg(horiz, c, a0, a1, 1.08, 1.13, 5, mat(0x9aa0a6, .35, .8));
+  wseg(horiz, c, a0, a1, 1.06, 1.14, 7, mat(0x9aa0a6, .6, .15));
   const n = Math.max(1, Math.round((a1 - a0) * S / 1.6));
-  for (let k = 0; k <= n; k++) { const p = a0 + (a1 - a0) * k / n; wseg(horiz, c, p - 1.6, p + 1.6, 0, 1.13, 5, mat(0x9aa0a6, .35, .8)); }
+  for (let k = 0; k <= n; k++) { const p = a0 + (a1 - a0) * k / n; wseg(horiz, c, p - 2.2, p + 2.2, 0, 1.14, 6.5, mat(0x9aa0a6, .6, .15)); }
   const b = horiz ? [a0, c - 3.5, a1, c + 3.5] : [c - 3.5, a0, c + 3.5, a1]; colRect(...b); mapWalls.push([...b, 'r']);
 }
 const DOORW = 0xf1eee8;
@@ -404,11 +406,11 @@ const rbPx = (g, x1, y1, x2, y2, y0, h, r, m) => rb(g, (x2 - x1) * S, h, (y2 - y
 function put(g, px, py, rot = 0, bb) { g.position.set(wx(px), 0, wz(py)); g.rotation.y = rot; (g.userData.tall ? wardG : furn).add(g); if (bb) colRect(...bb, 1); return g; }
 const face = (px, py, tx, ty) => Math.atan2(tx - px, ty - py);
 function rug(px, py, w, d, color) { const r = rb(furn, w, .014, d, .004, tmat('rug' + color, color, T.rug, { bs: 1.5, r: 1 }), wx(px), 0, wz(py), 2); r.castShadow = false; return r; }
-const CHROME = mat(0xe2e6e9, .4, .6);
+const CHROME = mat(0xe2e6e9, .5, .3);
 const M = {
   fab: tmat('fab', 0xe0d4c0, T.fabric, { bs: 1.2, r: .95 }), fabB: tmat('fabB', 0xd2c6b2, T.fabric, { bs: 1.2, r: .95 }),
   navy: tmat('navy', 0x233866, T.fabric, { bs: 1.2, r: .95 }), grayF: tmat('grayF', 0x6a7580, T.fabric, { bs: 1.2, r: .95 }),
-  sheet: mat(0xf6f3ee, .92), pillow: mat(0xfbfaf7, .95), dark: mat(0x2c2f34, .5, .5), brass: mat(0xc9ccd0, .45, .55),
+  sheet: mat(0xf6f3ee, .92), pillow: mat(0xfbfaf7, .95), dark: mat(0x2c2f34, .5, .5), brass: mat(0xc9ccd0, .6, .25),
   veneer: tmat('veneer', 0xffffff, T.veneer, { bs: .5, r: .55 }), granite: tmat('granite', 0xffffff, T.granite, { bs: .3, r: .25, m: .1 }),
   ward: tmat('ward', 0xffffff, T.veneerV, { bs: .6, r: .6 }, false), cab: mat(0xf2f1ee, .45), cabD: mat(0xe5e3de, .5), rug: tmat('rug', 0xffffff, T.rug, { bs: 1.5, r: 1 }),
   porc: mat(0xffffff, .2), steel: mat(0xaeb4b9, .25, .9)
@@ -737,8 +739,8 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
   art(685, 520, -PI / 2, .9, .65, 1.4, ['#efe6d3', '#7a9e9f', '#d98b5f', '#3d405b']);
   art(1015, 250, -PI / 2, .8, .6, 1.4, ['#f3ede2', '#8fb8de', '#d6a2ad', '#5a6b86']);
   const cm = new THREE.MeshStandardMaterial({ color: 0xf6f1e7, roughness: 1, transparent: true, opacity: .55, side: THREE.DoubleSide });
-  for (const [x1, x2] of [[408, 438], [522, 530]]) { const n = 7; for (let i = 0; i < n; i++) { const x = x1 + (x2 - x1) * i / (n - 1); const m = new THREE.Mesh(new THREE.BoxGeometry(.05, 2.45, .06), cm); m.position.set(wx(x), 1.25, wz(253) + (i % 2) * .03); furn.add(m); } }
-  bx(furn, (534 - 404) * S, .03, .03, mat(0x777b80, .4, .8), wx(469), 2.46, wz(254));
+  for (const [x1, x2] of [[408, 438], [522, 530]]) { const n = 7; for (let i = 0; i < n; i++) { const x = x1 + (x2 - x1) * i / (n - 1); const m = new THREE.Mesh(new THREE.BoxGeometry(.05, 2.45, .06), cm); m.position.set(wx(x), 1.25, wz(253) + (i % 2) * .03); wardG.add(m); } }
+  bx(wardG, (534 - 404) * S, .03, .03, mat(0x777b80, .6, .2), wx(469), 2.46, wz(254));
 }
 
 /* ---------------------------------------------------------------- luxury details: chandelier, drapes, mirror, towels, plant */
@@ -754,9 +756,9 @@ put(ficus(), 636, 462, 0, [626, 452, 646, 472]);
   g.position.set(wx(543), 0, wz(372)); ceilG.add(g);
   // full-length drapes
   const dr = (x1, x2, y, dir) => { const n = Math.round((x2 - x1) / 5), cm = mat(0xcdbfa8, .95);
-    for (let i = 0; i < n; i++) { const x = x1 + (x2 - x1) * (i + .5) / n; bx(furn, (x2 - x1) / n * S * 1.05, 2.45, .05, cm, wx(x), .05, wz(y) + dir * (i % 2 ? .035 : 0)); }
-    bx(furn, (x2 - x1) * S, .03, .03, mat(0x777b80, .4, .8), wx((x1 + x2) / 2), 2.5, wz(y) + dir * .02); };
-  dr(488, 514, 951, -1); dr(558, 584, 951, -1); dr(837, 850, 951, -1); dr(890, 905, 951, -1); bx(furn, 96 * S, .03, .03, mat(0x777b80, .4, .8), wx(536), 2.5, wz(951)); bx(furn, 98 * S, .03, .03, mat(0x777b80, .4, .8), wx(870), 2.5, wz(951));
+    for (let i = 0; i < n; i++) { const x = x1 + (x2 - x1) * (i + .5) / n; bx(wardG, (x2 - x1) / n * S * 1.05, 2.45, .05, cm, wx(x), .05, wz(y) + dir * (i % 2 ? .035 : 0)); }
+    bx(wardG, (x2 - x1) * S, .03, .03, mat(0x777b80, .6, .2), wx((x1 + x2) / 2), 2.5, wz(y) + dir * .02); };
+  dr(488, 514, 951, -1); dr(558, 584, 951, -1); dr(837, 850, 951, -1); dr(890, 905, 951, -1); bx(wardG, 96 * S, .03, .03, mat(0x777b80, .6, .2), wx(536), 2.5, wz(951)); bx(wardG, 98 * S, .03, .03, mat(0x777b80, .6, .2), wx(870), 2.5, wz(951));
   // mirror in the parents' room
   { const m = new THREE.Group(); rb(m, .04, 1.5, .8, .02, mat(0x2c2a26, .5), 0, .45, 0); rb(m, .02, 1.4, .7, .01, mat(0xbfd9ea, .03, .9), -.015, .5, 0); m.position.set(wx(905), 0, wz(786)); furn.add(m); }
   // towels on the tub rim and a corner plant in the parents' room
@@ -1329,7 +1331,7 @@ setTime('day');
 function applyLang() {
   const en = LANG === 'en'; document.documentElement.lang = en ? 'en' : 'he'; document.documentElement.dir = en ? 'ltr' : 'rtl'; document.title = en ? '3D walkthrough – Disraeli 14, apartment 7–9' : 'סיור תלת-ממדי – דישראלי 14, דירה 7–9';
   $('sTitle').textContent = T_('דישראלי 14'); $('sSub').textContent = T_('דירה מס׳ 7–9 · 5 חדרים · כ-125 מ״ר + מרפסת כ-14 מ״ר'); $('goFP').textContent = T_('🚶 התחל סיור בגובה עיניים'); $('goOrbit').textContent = T_('🏠 מבט-על (בית בובות)');
-  $('roomPre').textContent = T_('נמצאים ב:'); $('disc').textContent = T_('הרהיטים וההדמיה נועדו להמחשה בלבד'); $('bTp').textContent = T_('📍 מעבר מהיר'); $('bTour').textContent = T_(tourOn ? '■ עצירת סיור' : '▶ סיור מודרך'); $('bOT').textContent = T_(ovOn ? '■ עצירת סיור' : '🎥 סיור מבט-על');
+  $('roomPre').textContent = T_('נמצאים ב:'); $('promoTxt').textContent = T_('רוצים אתר דומה או אחר? לחצו על הקישור או צרו קשר:'); $('disc').textContent = T_('הרהיטים וההדמיה נועדו להמחשה בלבד'); $('bTp').textContent = T_('📍 מעבר מהיר'); $('bTour').textContent = T_(tourOn ? '■ עצירת סיור' : '▶ סיור מודרך'); $('bOT').textContent = T_(ovOn ? '■ עצירת סיור' : '🎥 סיור מבט-על');
   $('bL').textContent = en ? '🌐 עברית' : '🌐 English'; $('bView').textContent = T_(mode === 'fp' ? '🏠 מבט-על' : '🚶 גוף ראשון'); $('lHe').classList.toggle('on', !en); $('lEn').classList.toggle('on', en);
   SPOTS.forEach((s, i) => { $('tp').children[i].textContent = T_(s[0]); }); setStartList(); updateHint(); buildLabels(); setTime(curTime); lastRoom = '';
   if (tourOn) { const [, t, d] = TOUR[tourIdx]; $('cap').innerHTML = `<b>${T_(t)}</b><span>${T_(d)}</span>`; }
@@ -1353,6 +1355,8 @@ new MutationObserver(sweep).observe(document.documentElement,{childList:true,sub
 </script>
 </body>
 </html>
+
+
 
 
 
